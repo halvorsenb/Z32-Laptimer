@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Z32 Track Dash</title>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#04070b">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#04070b;--pn:#0b121b;--bd:#27374b;--fg:#e6edf5;--mut:#8798ae;--g:#2be36f;--r:#ff3d4d;--a:#ffb21f;--u:1vh;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(orientation:portrait){:root{--u:1vw}}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;background:var(--bg);color:var(--fg);font-family:'Share Tech Mono',ui-monospace,Menlo,monospace;overflow:hidden}
+body{display:flex;flex-direction:column;height:100dvh}
+.ddu{flex:1;min-height:0;display:grid;gap:4px;padding:4px;grid-template-columns:1fr 1fr 1.5fr 1.7fr;grid-template-rows:.8fr 1fr 1fr 1fr 1fr .5fr;
+grid-template-areas:"rpm rpm rpm rpm" "tfl tfr gear spd" "trl trr gear pred" "fuel last gear dlt" "cs best gear dlt" "g g g g"}
+@media(orientation:portrait){.ddu{grid-template-columns:1fr 1fr;grid-template-rows:.7fr 1.7fr 1fr 1.2fr 1fr 1fr 1fr 1fr .5fr;
+grid-template-areas:"rpm rpm" "gear gear" "spd pred" "dlt dlt" "tfl tfr" "trl trr" "fuel last" "cs best" "g g"}}
+.p{background:var(--pn);border:1px solid var(--bd);border-radius:4px;padding:3px 7px;position:relative;min-width:0;min-height:0;display:flex;flex-direction:column;justify-content:center;overflow:hidden}
+.l{font-size:max(10px,2.1*var(--u));color:var(--mut);letter-spacing:.04em}
+.n{font-size:max(18px,7.5*var(--u));line-height:1.05;font-variant-numeric:tabular-nums;white-space:nowrap}
+.sm{font-size:max(11px,2.4*var(--u));color:var(--mut)}
+.w{color:var(--fg)}.g{color:var(--g)}.r{color:var(--r)}.dim{color:var(--mut)}.on{color:var(--a)}
+#dlt .n{font-size:max(36px,17*var(--u));text-align:center}
+.gear .gn{font-size:max(60px,38*var(--u));text-align:center;line-height:1}
+.q{position:absolute;width:15%;aspect-ratio:1;border:1px solid var(--bd);background:var(--bg)}
+.q.c{background:#2020d8;border-color:#2020d8}.q.h{background:var(--r);border-color:var(--r)}
+#q0{left:6%;top:6%}#q1{right:6%;top:6%}#q2{left:6%;bottom:6%}#q3{right:6%;bottom:6%}
+.tk{position:relative;height:1.3em;font-size:max(11px,2.4*var(--u));color:var(--fg)}.tk span{position:absolute;transform:translateX(-50%)}
+.bar{position:relative;flex:1;min-height:8px;background:linear-gradient(90deg,#161f2b 0 73.9%,#5a2a14 73.9%);margin-top:2px}
+.bar i{display:block;height:100%;width:var(--p,0%);background:var(--c,#cfd9e6)}
+.bar::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(90deg,transparent 0 calc(2.5% - 3px),var(--pn) calc(2.5% - 3px) 2.5%)}
+.p.off{opacity:.3;filter:grayscale(1)}.p.off .n{color:var(--mut)}
+.cs.flash{background:#3a2a05;border-color:var(--a)}
+.gbar{flex-direction:row;align-items:center;gap:10px}
+.gb{position:relative;flex:1;height:50%;background:#161f2b}
+.gb i{position:absolute;top:0;bottom:0;background:var(--c,#cfd9e6)}
+.gb u{position:absolute;left:50%;top:-20%;bottom:-20%;width:2px;background:var(--mut)}
+.gbar .n{font-size:max(14px,4*var(--u));min-width:3.4em;text-align:right}
+.ctl{display:flex;flex-wrap:wrap;gap:4px;align-items:center;padding:0 4px 4px}
+button{font:inherit;font-size:13px;background:var(--pn);color:var(--fg);border:1px solid var(--bd);border-radius:4px;padding:5px 9px;min-height:32px}
+button.p2{background:var(--g);color:#06140b;border-color:var(--g)}
+button:focus-visible{outline:2px solid var(--a)}
+#st{margin-left:auto;font-size:12px;color:var(--mut)}
+</style></head><body>
+<div class="ddu">
+ <div class="p" style="grid-area:rpm"><div class="tk"><span style="left:0;transform:none">0</span><span style="left:10.87%">1</span><span style="left:21.74%">2</span><span style="left:32.61%">3</span><span style="left:43.48%">4</span><span style="left:54.35%">5</span><span style="left:65.22%">6</span><span style="left:76.09%">7</span><span style="left:86.96%">8</span><span style="left:97.83%">9</span></div><div class="bar" id="rb"><i></i></div></div>
+ <div class="p" style="grid-area:tfl"><div class="l">Pres FL</div><div class="n" id="tp0">–</div></div>
+ <div class="p" style="grid-area:tfr"><div class="l">Pres FR</div><div class="n" id="tp1">–</div></div>
+ <div class="p" style="grid-area:trl"><div class="l">Pres RL</div><div class="n" id="tp2">–</div></div>
+ <div class="p" style="grid-area:trr"><div class="l">Pres RR</div><div class="n" id="tp3">–</div></div>
+ <div class="p" style="grid-area:fuel"><div class="l" id="fl">Lap fuel</div><div class="n" id="fv">—</div></div>
+ <div class="p" style="grid-area:last"><div class="l" id="lbl">Last lap</div><div class="n" id="ll">–:––.–––</div></div>
+ <div class="p cs" id="cs" style="grid-area:cs"><div class="l">Corner spd &gt;1g</div><div class="n dim" id="cv">—</div></div>
+ <div class="p" style="grid-area:best"><div class="l">Best lap</div><div class="n g" id="bs">–:––.–––</div></div>
+ <div class="p gear" style="grid-area:gear"><b class="q" id="q0"></b><b class="q" id="q1"></b><b class="q" id="q2"></b><b class="q" id="q3"></b><div class="gn" id="gr">N</div></div>
+ <div class="p" style="grid-area:spd"><div class="l" id="sl">Speed</div><div class="n" id="sp">0</div></div>
+ <div class="p" style="grid-area:pred"><div class="l">Predicted lap time</div><div class="n" id="pr">–:––.–––</div><div class="sm" id="cu">cur 0:00.000</div></div>
+ <div class="p" id="dlt" style="grid-area:dlt"><div class="l">Lap gain / loss</div><div class="n w" id="dl">––.––</div></div>
+ <div class="p gbar" style="grid-area:g"><span class="l">Lat G</span><div class="gb"><i id="gb"></i><u></u></div><span class="n" id="gv">0.00</span></div>
+</div>
+<div class="ctl">
+ <button class="p2" id="bSim">Start simulator</button><button id="bMul">Sim ×1</button><button id="bBle">Connect ESP32</button><button id="bPh">Phone GPS: off</button><button id="bCal">Calibrate g</button><button id="bLine">Set line here</button><button id="bFuel">gal</button><button id="bSpd">mph</button><button id="bFs">Fullscreen</button><button id="bExp">Export CSV</button><button id="bRst">Reset</button><span id="st">idle</span>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+const SVC='a1b2c3d4-0001-4000-8000-00805f9b34fb',FAST='a1b2c3d4-0002-4000-8000-00805f9b34fb',SLOW='a1b2c3d4-0003-4000-8000-00805f9b34fb';
+/* FAST packet, little-endian, 24 bytes: u32 gpsTimeMs, i32 lat*1e7, i32 lon*1e7, u16 speed 0.01 m/s, u16 heading 0.01 deg, i16 latG mG, i16 lonG mG, u32 fuelMl (cumulative)
+   SLOW packet, 16 bytes: 4x u16 tire 0.1 psi, 4x i16 brake temp C (FL FR RL RR) */
+const S={fuel:'gal',spd:'mph',line:null,pkts:[],laps:[],best:null,cur:null,prev:null,ri:0,origin:null,last:null,cv:null,con:false,slow:{tp:[0,0,0,0],bt:[0,0,0,0]},src:'idle',n:0,rate:0};
+const fmtT=ms=>{if(ms==null||isNaN(ms))return'–:––.–––';const m=Math.floor(ms/60000);return m+':'+((ms%60000)/1000).toFixed(3).padStart(6,'0')};
+const toXY=(la,lo)=>{if(!S.origin)S.origin={la,lo};return{x:(lo-S.origin.lo)*Math.cos(S.origin.la*Math.PI/180)*111320,y:(la-S.origin.la)*110540}};
+const cross=(a,b)=>a.x*b.y-a.y*b.x,sub=(a,b)=>({x:a.x-b.x,y:a.y-b.y});
+
+function feed(p,src){if(S.active!==src){S.active=src;S.prev=null;S.cur=null;S.cv=null;S.con=false}S.gpsT=performance.now();ingest(p)}
+function ingest(p){
+ const xy=toXY(p.lat,p.lon);p.x=xy.x;p.y=xy.y;S.last=p;S.pkts.push(p);S.n++;
+ const sf=performance.now()-(S.slowT||-1e9)<5000;p.tp=sf?S.slow.tp.slice():null;p.bt=sf?S.slow.bt.slice():null; /* snapshot tires/brakes onto every sample */
+ if(Math.abs(p.gl)>1){S.cv=p.v;S.con=true}else S.con=false;
+ const pr=S.prev;S.prev=p;if(!pr)return;
+ const seg=Math.hypot(p.x-pr.x,p.y-pr.y);
+ if(S.line){
+  const r=sub(p,pr),s=sub(S.line.b,S.line.a),den=cross(r,s);
+  if(Math.abs(den)>1e-9){
+   const q=sub(S.line.a,pr),t=cross(q,s)/den,u=cross(q,r)/den;
+   if(t>=0&&t<1&&u>=0&&u<=1&&r.x*S.line.d.x+r.y*S.line.d.y>0){
+    const ct=pr.t+t*(p.t-pr.t),cf=pr.fuel+t*(p.fuel-pr.fuel);
+    if(S.cur){
+     const ms=ct-S.cur.t0;
+     if(ms>8000){const lap={n:S.laps.length+1,ms,fuel:cf-S.cur.f0,tr:S.cur.tr,t0:S.cur.t0};S.laps.push(lap);if(!S.best||ms<S.best.ms)S.best=lap}
+    }
+    const d=(1-t)*seg;S.cur={t0:ct,f0:cf,d,tr:[[0,0],[d,p.t-ct]]};S.ri=0;return;
+   }
+  }
+ }
+ if(S.cur){S.cur.d+=seg;S.cur.tr.push([S.cur.d,p.t-S.cur.t0])}
+}
+function setLine(){
+ const p=S.last;if(!p)return;const h=(p.hdg||0)*Math.PI/180,d={x:Math.sin(h),y:Math.cos(h)},n={x:Math.cos(h),y:-Math.sin(h)};
+ S.line={a:{x:p.x+n.x*20,y:p.y+n.y*20},b:{x:p.x-n.x*20,y:p.y-n.y*20},d};S.cur=null;S.prev=p;p.ln=1; /* marks the sample where the line was set; replay rebuilds the line from it */
+}
+const conv={spd:v=>S.spd==='mph'?v*2.23694:v*3.6,fuel:ml=>S.fuel==='gal'?(ml/3785.41).toFixed(3):(ml/1000).toFixed(2)};
+
+const GEARS=[3.214,1.925,1.302,1,.752],FD=4.08,CIRC=1.953,CAL=1.0; /* 235/35R18 rolling circumference in m; tune CAL against GPS speed */
+let lastGear='N';
+const A={};document.querySelectorAll('.ddu>.p').forEach(e=>{A[e.getAttribute('style').match(/grid-area:(\w+)/)[1]]=e});
+function calcGear(p){
+ if(!p.rpm||p.rpm<600||p.v<1.5){lastGear='N';return lastGear}
+ const r=p.rpm*CIRC*CAL/(p.v*60);let best=0,err=9;
+ GEARS.forEach((g,i)=>{const e=Math.abs(r/(g*FD)-1);if(e<err){err=e;best=i+1}});
+ if(err<.09)lastGear=best;
+ return lastGear;
+}
+function simRpm(v){let r=1200;for(const g of GEARS){r=v*60*g*FD/CIRC;if(r<=7000)break}return Math.max(1200,Math.min(7300,r))}
+function render(){
+ const p=S.last,T=(i,v)=>{$(i).textContent=v};
+ const imuOn=!!p&&S.active==='phone'&&IM.ok&&performance.now()-IM.t<500;
+ let GL=p?p.gl:0;if(imuOn){GL=IM.gl;S.con=Math.abs(GL)>1;if(S.con)S.cv=p.v}
+ T('sl','Speed '+S.spd);T('fl','Lap fuel '+S.fuel);
+ if(p){T('sp',Math.round(conv.spd(p.v)));T('gv',GL.toFixed(2));
+  const rp=p.rpm||0;$('rb').style.setProperty('--p',Math.min(100,rp/92)+'%');$('rb').style.setProperty('--c',rp>=6800?'#ff6a2b':'#cfd9e6');
+  T('gr',p.gear||calcGear(p));
+  const gl=Math.max(-1.5,Math.min(1.5,GL)),w=Math.abs(gl)/1.5*50,b=$('gb');b.style.width=w+'%';b.style.left=(gl>=0?50:50-w)+'%';b.style.setProperty('--c',Math.abs(GL)>1?'#ffb21f':'#cfd9e6')}
+ let dl=null;
+ if(S.cur&&p){
+  const ct=p.t-S.cur.t0;T('cu','cur '+fmtT(ct));
+  const ref=S.best&&S.best.tr;
+  if(ref&&ref!==S.cur.tr){const d=S.cur.d;while(S.ri<ref.length-2&&ref[S.ri+1][0]<d)S.ri++;const a=ref[S.ri],b=ref[S.ri+1];
+   if(b&&d<=ref[ref.length-1][0]){dl=ct-(a[1]+(d-a[0])/((b[0]-a[0])||1)*(b[1]-a[1]))}}
+ }
+ const e=$('dl');
+ if(dl==null){e.textContent='––.––';e.className='n w'}else{e.textContent=(dl<0?'−':'+')+Math.abs(dl/1000).toFixed(2);e.className='n '+(dl<0?'g':'r')}
+ T('pr',dl==null?'–:––.–––':fmtT(S.best.ms+dl));
+ const L=S.laps[S.laps.length-1];
+ T('ll',L?fmtT(L.ms):'–:––.–––');T('lbl',L?'Last lap L'+L.n:'Last lap');T('bs',S.best?fmtT(S.best.ms):'–:––.–––');
+ T('fv',L?conv.fuel(L.fuel):'—');
+ const c=$('cv');c.textContent=S.cv==null?'—':Math.round(conv.spd(S.cv));c.className='n '+(S.con?'on':'dim');$('cs').className='p cs'+(S.con?' flash':'');
+ S.slow.tp.forEach((x,i)=>T('tp'+i,x?x.toFixed(1):'–'));
+ S.slow.bt.forEach((x,i)=>{$('q'+i).className='q'+(x>650?' h':x&&x<250?' c':'')});
+ const now=performance.now(),live=now-(S.gpsT||-1e9)<3000,hasRpm=live&&!!p&&p.rpm!=null,hasFuel=live&&!!p&&p.fuel!=null,hasSlow=now-(S.slowT||-1e9)<5000;
+ ['spd','pred','dlt','last','best','cs','g'].forEach(a=>A[a].classList.toggle('off',!live));
+ A.rpm.classList.toggle('off',!hasRpm);A.fuel.classList.toggle('off',!hasFuel);
+ ['tfl','tfr','trl','trr'].forEach(a=>A[a].classList.toggle('off',!hasSlow));
+ $('gr').className='gn'+(hasRpm?'':' dim');if(!hasRpm)T('gr','–');if(!hasFuel)T('fv','—');
+ for(let i=0;i<4;i++){$('q'+i).style.opacity=hasSlow?1:.2;if(!hasSlow)T('tp'+i,'–')}
+ const nm={sim:'Simulator',ble:'ESP32',phone:'Phone GPS ~1 Hz'}[S.active]||'no source';
+ T('st',nm+(imuOn?' + phone IMU':'')+(live?'':' (no signal)')+(/^(BLE|Phone|Cal|Screen)/.test(S.src)?' · '+S.src:'')+' · '+S.rate+' Hz');
+}
+setInterval(render,50);setInterval(()=>{S.rate=S.n-(S._n||0);S._n=S.n},1000);
+
+/* ---------- Simulator ---------- */
+const SIM={on:false,mul:1,timer:null,trk:null,s:0,t:0,fuel:0,vp:0,lf:1,tires:[32,32,32,32],bt:[120,120,100,100],j:0};
+function buildTrack(){
+ const N=700,P=[];
+ for(let i=0;i<N;i++){const th=2*Math.PI*i/N,R=210*(1+.28*Math.cos(2*th)+.16*Math.sin(3*th+.6));P.push({x:1.5*R*Math.cos(th),y:R*Math.sin(th)})}
+ const cum=[0],H=[],K=[];
+ for(let i=0;i<N;i++){const a=P[i],b=P[(i+1)%N];H.push(Math.atan2(b.x-a.x,b.y-a.y));cum.push(cum[i]+Math.hypot(b.x-a.x,b.y-a.y))}
+ const wr=x=>{while(x>Math.PI)x-=2*Math.PI;while(x<-Math.PI)x+=2*Math.PI;return x};
+ for(let i=0;i<N;i++){const a=H[(i+N-1)%N],b=H[i];K.push(wr(b-a)/(((cum[i+1]-cum[i])+(i>0?cum[i]-cum[i-1]:cum[1]-cum[0]))/2))}
+ const Ks=K.map((_,i)=>{let s=0;for(let j=-6;j<=6;j++)s+=K[(i+j+N)%N];return s/13});
+ const V=Ks.map(k=>Math.min(58,Math.sqrt(10.8/Math.max(Math.abs(k),1e-4))));
+ for(let r=0;r<3;r++){for(let i=N*2;i>=0;i--){const a=i%N,b=(i+1)%N,ds=cum[a+1]-cum[a];V[a]=Math.min(V[a],Math.sqrt(V[b]*V[b]+2*9*ds))}
+  for(let i=0;i<N*2;i++){const a=i%N,b=(i+1)%N,ds=cum[a+1]-cum[a];V[b]=Math.min(V[b],Math.sqrt(V[a]*V[a]+2*5*ds))}}
+ return{P,cum,H,K:Ks,V,L:cum[N],N};
+}
+function simStep(dt){
+ const T=SIM.trk,N=T.N;let j=SIM.j;
+ while(SIM.s>=T.L){SIM.s-=T.L;j=0;SIM.lf=.965+Math.random()*.05}
+ while(T.cum[j+1]<=SIM.s)j++;SIM.j=j;
+ const f=(SIM.s-T.cum[j])/(T.cum[j+1]-T.cum[j]),a=T.P[j],b=T.P[(j+1)%N];
+ const x=a.x+(b.x-a.x)*f,y=a.y+(b.y-a.y)*f,v=(T.V[j]+(T.V[(j+1)%N]-T.V[j])*f)*SIM.lf,k=T.K[j];
+ const rpm=simRpm(v);const gl=v*v*k/9.81,gx=(v-SIM.vp)/dt/9.81;SIM.vp=v;SIM.s+=v*dt;SIM.t+=dt*1000;SIM.fuel+=(8+v*.35)*dt;
+ for(let i=0;i<4;i++){const fr=i<2?1.3:.7;SIM.bt[i]+=(gx<-.2?-gx*260*fr*dt:0)-(SIM.bt[i]-60)*.03*(1+v/30)*dt;SIM.tires[i]+=(Math.abs(gl)*.02+.0015)*dt-(SIM.tires[i]-32)*.0005*dt}
+ const o=S.origin||{la:36.5845,lo:-121.754};
+ feed({t:Math.round(SIM.t),lat:o.la+y/110540,lon:o.lo+x/(111320*Math.cos(o.la*Math.PI/180)),v,hdg:(T.H[j]*180/Math.PI+360)%360,gl,gx,fuel:SIM.fuel,rpm},'sim');
+}
+function simStart(){
+ if(!SIM.trk)SIM.trk=buildTrack();
+ SIM.s=SIM.trk.L-35;SIM.j=0;SIM.vp=SIM.trk.V[0];S.src='simulator';
+ if(!S.origin)S.origin={la:36.5845,lo:-121.754};
+ simStep(.04);setLine();
+ SIM.timer=setInterval(()=>{for(let i=0;i<SIM.mul;i++){simStep(.04);if(i%2==0){S.slow={tp:SIM.tires.slice(),bt:SIM.bt.slice()};S.slowT=performance.now()}}},40);
+ SIM.on=true;$('bSim').textContent='Stop simulator';wake();
+}
+function simStop(){clearInterval(SIM.timer);if(S.active==='sim')S.active=null;SIM.on=false;S.src='idle';$('bSim').textContent='Start simulator'}
+
+/* ---------- Bluetooth ---------- */
+async function connectBle(){
+ if(!navigator.bluetooth){alert('Web Bluetooth is not available here. Open this page in Chrome on Android over HTTPS.');return}
+ try{
+  const dev=await navigator.bluetooth.requestDevice({filters:[{services:[SVC]}]});
+  const srv=await(await dev.gatt.connect()).getPrimaryService(SVC);
+  const f=await srv.getCharacteristic(FAST);
+  f.addEventListener('characteristicvaluechanged',e=>{const d=e.target.value;
+   for(let o=0;o+24<=d.byteLength;o+=24){S.bleT=performance.now();if(!SIM.on)feed({t:d.getUint32(o,true),lat:d.getInt32(o+4,true)/1e7,lon:d.getInt32(o+8,true)/1e7,v:d.getUint16(o+12,true)/100,hdg:d.getUint16(o+14,true)/100,gl:d.getInt16(o+16,true)/1000,gx:d.getInt16(o+18,true)/1000,fuel:d.getUint32(o+20,true)},'ble')}});
+  await f.startNotifications();
+  try{const sc=await srv.getCharacteristic(SLOW);sc.addEventListener('characteristicvaluechanged',e=>{const d=e.target.value;S.slowT=performance.now();S.slow={tp:[0,2,4,6].map(i=>d.getUint16(i,true)/10),bt:[8,10,12,14].map(i=>d.getInt16(i,true))}});await sc.startNotifications()}catch(_){}
+  S.src='ESP32 BLE';$('bBle').textContent='ESP32 connected';wake();
+  dev.addEventListener('gattserverdisconnected',()=>{S.src='BLE lost';$('bBle').textContent='Reconnect ESP32'});
+ }catch(err){S.src='BLE: '+(err.message||err)}
+}
+async function wake(){try{await navigator.wakeLock.request('screen')}catch(_){}}
+
+/* ---------- Phone IMU (needs calibration) ---------- */
+const IM={ok:false,u:null,uc:null,f:null,r:null,gl:0,gx:0,t:0,mode:null,sum:[0,0,0],cnt:0,fw:[0,0,0],fn:0,t0:0};
+const dot=(a,b)=>a[0]*b[0]+a[1]*b[1]+a[2]*b[2],crs=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]],nrm=a=>{const m=Math.hypot(a[0],a[1],a[2])||1;return a.map(x=>x/m)};
+function setAxes(u,f){IM.u=u;IM.f=f;IM.r=crs(f,u);IM.ok=true}
+try{const c=JSON.parse(localStorage.getItem('z32cal')||'null');if(c)setAxes(c.u,c.f)}catch(_){}
+window.addEventListener('devicemotion',e=>{
+ const a=e.accelerationIncludingGravity;if(!a||a.x==null)return;
+ const v=[a.x,a.y,a.z];
+ if(IM.mode==='level'){for(let i=0;i<3;i++)IM.sum[i]+=v[i];IM.cnt++;return}
+ if(IM.mode==='fwd'){const g=dot(v,IM.uc),h=[v[0]-g*IM.uc[0],v[1]-g*IM.uc[1],v[2]-g*IM.uc[2]];if(Math.hypot(h[0],h[1],h[2])>1.2){for(let i=0;i<3;i++)IM.fw[i]+=h[i];IM.fn++}return}
+ if(IM.ok){const g=dot(v,IM.u),h=[v[0]-g*IM.u[0],v[1]-g*IM.u[1],v[2]-g*IM.u[2]];
+  IM.gl+=.15*(dot(h,IM.r)/9.81-IM.gl);IM.gx+=.15*(dot(h,IM.f)/9.81-IM.gx);IM.t=performance.now()}
+});
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+async function calibrate(){
+ try{if(window.DeviceMotionEvent&&DeviceMotionEvent.requestPermission)await DeviceMotionEvent.requestPermission()}catch(_){}
+ S.src='Cal: step 1, hold still, phone mounted';
+ IM.mode='level';IM.sum=[0,0,0];IM.cnt=0;await wait(1500);
+ if(IM.cnt<20){IM.mode=null;S.src='Cal: no motion sensor data (needs HTTPS and Chrome)';return}
+ IM.uc=nrm(IM.sum);IM.fw=[0,0,0];IM.fn=0;IM.mode='fwd';
+ S.src='Cal: step 2, accelerate straight ahead, gently';
+ const t0=performance.now();while(performance.now()-t0<15000&&IM.fn<90)await wait(100);
+ IM.mode=null;
+ if(IM.fn<90){S.src='Cal: not enough straight acceleration, try again';return}
+ const f=nrm(IM.fw);setAxes(IM.uc,f);
+ try{localStorage.setItem('z32cal',JSON.stringify({u:IM.uc,f}))}catch(_){}
+ S.src='Cal: done';
+}
+$('bCal').onclick=calibrate;
+/* ---------- Phone GPS fallback ---------- */
+const PH={id:null,last:null,gl:0};
+const bleFresh=()=>S.bleT&&performance.now()-S.bleT<2000;
+function phoneFix(pos){
+ if(SIM.on||bleFresh())return;
+ const c=pos.coords,t=pos.timestamp,pr=PH.last,k=Math.PI/180;
+ let v=c.speed,h=c.heading,gx=0;
+ if(pr&&t>pr.t&&t-pr.t<3000){
+  const dt=(t-pr.t)/1000,dx=(c.longitude-pr.lon)*Math.cos(c.latitude*k)*111320,dy=(c.latitude-pr.lat)*110540,d=Math.hypot(dx,dy);
+  if(v==null)v=d/dt;
+  if(h==null||isNaN(h))h=d>1?(Math.atan2(dx,dy)/k+360)%360:pr.hdg;
+  gx=(v-pr.v)/dt/9.81;
+  const dh=(((h-pr.hdg)%360)+540)%360-180;
+  PH.gl=PH.gl*.5+(v>3?v*dh*k/dt/9.81:0)*.5;
+ }else PH.gl=0;
+ v=v||0;h=(h==null||isNaN(h))?0:h;
+ PH.last={t,lat:c.latitude,lon:c.longitude,v,hdg:h};
+ feed({t,lat:c.latitude,lon:c.longitude,v,hdg:h,gl:(IM.ok&&performance.now()-IM.t<500)?IM.gl:PH.gl,gx:(IM.ok&&performance.now()-IM.t<500)?IM.gx:gx},'phone');
+}
+function phoneToggle(){
+ if(PH.id!=null){navigator.geolocation.clearWatch(PH.id);PH.id=null;PH.last=null;$('bPh').textContent='Phone GPS: off';return}
+ if(!navigator.geolocation){S.src='Phone GPS: not available here';return}
+ PH.id=navigator.geolocation.watchPosition(phoneFix,e=>{S.src='Phone GPS: '+e.message},{enableHighAccuracy:true,maximumAge:0,timeout:15000});
+ $('bPh').textContent='Phone GPS: on';wake();
+}
+$('bFs').onclick=async()=>{try{if(document.fullscreenElement){await document.exitFullscreen();return}await document.documentElement.requestFullscreen({navigationUI:'hide'});try{await screen.orientation.lock('landscape')}catch(_){}wake()}catch(err){S.src='Screen: fullscreen blocked here, host the page yourself'}};
+$('bPh').onclick=phoneToggle;
+/* ---------- Export / controls ---------- */
+async function exportCsv(){
+ const f=(x,d)=>x==null||!Number.isFinite(x)?'':x.toFixed(d),r0=x=>x==null||!Number.isFinite(x)?'':Math.round(x),E=['','','',''];
+ const rows=['gps_ms,lat,lon,speed_mps,heading,lat_g,lon_g,fuel_ml,rpm,tp_fl,tp_fr,tp_rl,tp_rr,bt_fl,bt_fr,bt_rl,bt_rr,line_set'].concat(S.pkts.map(p=>[p.t,p.lat.toFixed(7),p.lon.toFixed(7),f(p.v,2),f(p.hdg,1),f(p.gl,3),f(p.gx,3),r0(p.fuel),r0(p.rpm)].concat(p.tp?p.tp.map(x=>x.toFixed(1)):E,p.bt?p.bt.map(r0):E,[p.ln?1:'']).join(',')));
+ const lapRows=['','lap,ms,fuel_ml,start_ms'].concat(S.laps.map(l=>[l.n,Math.round(l.ms),r0(l.fuel),Math.round(l.t0)].join(',')));
+ const text=rows.concat(lapRows).join('\n'),file=new File([text],'z32-session.csv',{type:'text/csv'});
+ try{if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file]});return}}catch(_){}
+ try{const a=document.createElement('a');a.href=URL.createObjectURL(file);a.download=file.name;document.body.appendChild(a);a.click();a.remove()}catch(_){}
+ try{await navigator.clipboard.writeText(text);alert('CSV copied to clipboard ('+S.pkts.length+' samples).')}catch(_){}
+}
+$('bSim').onclick=()=>SIM.on?simStop():simStart();
+$('bMul').onclick=()=>{SIM.mul=SIM.mul===1?2:SIM.mul===2?5:1;$('bMul').textContent='Sim ×'+SIM.mul};
+$('bBle').onclick=connectBle;
+$('bLine').onclick=setLine;
+$('bFuel').onclick=()=>{S.fuel=S.fuel==='gal'?'L':'gal';$('bFuel').textContent=S.fuel};
+$('bSpd').onclick=()=>{S.spd=S.spd==='mph'?'kph':'mph';$('bSpd').textContent=S.spd};
+$('bExp').onclick=exportCsv;
+$('bRst').onclick=()=>{simStop();Object.assign(S,{line:null,pkts:[],laps:[],best:null,cur:null,prev:null,ri:0,origin:null,last:null,cv:null,con:false,n:0})};
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+</script></body></html>
